@@ -9,7 +9,7 @@ export default function EModalProvider(props:any) {
     const EM = React.useCallback(()=>{
         if (confirmRef)
             return confirmRef.current
-        throw new Error('[EModal]: Emodal ref is not defined! May use EM as parameter in useCallback or useMemo solve this.');
+        throw new Error('[EModal]: Emodal ref is not defined!');
     }, [confirmRef]);
 
     return (
