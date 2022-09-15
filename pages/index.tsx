@@ -14,22 +14,38 @@ const DefaultComponent = () => {
 const Home: NextPage = () => {
   const { EM } = useEModal();
 
+  const openSubModal = () => {
+    EM().Open({
+      title: 'Sub Modal',
+      content: (
+        <div>
+          <h1>Neasted Modal</h1>
+          <button onClick={()=>EM().Clear()}>Close all</button>
+          <button onClick={()=>EM().Close()}>Close this</button>
+        </div>
+      )
+    })
+  }
+
   const handlerClick = () => {
     EM().Open({
       title: 'Example Modal',
-      content:  <DefaultComponent/>,
+      content: <DefaultComponent/>,
       options: [
         {
-          text: 'NotExit', 
+          text: 'Open Sub Modal', 
           close: false,
-          act: ()=>alert('I told you.'),
+          act: openSubModal,
         },
         {
           text: 'Exit',
           close: true,
           act: ()=>{}
         }
-      ]
+      ],
+      configs: {
+        NoCloseButton: true
+      }
     })
   }
 

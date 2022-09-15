@@ -2,14 +2,19 @@ import React from 'react';
 import EModal, { ModalHandlersProps } from '../Component';
 
 const ModalContext = React.createContext({});
+const ErMsg = '[EMODAL]: Ref is not defined!'
 
 export default function EModalProvider(props:any) {
     const confirmRef = React.useRef<ModalHandlersProps>(null);
 
     const EM = React.useCallback(()=>{
-        if (confirmRef)
+        if (confirmRef && confirmRef.current)
             return confirmRef.current
-        throw new Error('[EModal]: Emodal ref is not defined!');
+        return {
+            Open: ()=>console.log(ErMsg),
+            Close: ()=>console.log(ErMsg),
+            Clear: ()=>console.log(ErMsg)
+        }
     }, [confirmRef]);
 
     return (

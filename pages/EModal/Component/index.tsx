@@ -74,50 +74,51 @@ TypeProps> =
         Clear
     }));
 
-    return (
-        <>
-            {
-                eModal.length > 0 &&
-                eModal.map((EM:EModalProps, i:number)=>(
-                    <ModalBg key={i}>
-                        <ModalBox h={'auto'} w={'auto'}>
-                            <ModalHeader>
-                                <h3> {EM.title} </h3>
-                                {
-                                    !EM.configs?.NoCloseButton &&
-                                    <CloseButton onClick={()=>Close(undefined, EM.configs?.OnCloseAction)} />
-                                }
-                            </ModalHeader>
-                            <ModalContent>
-                                {EM.content}
-                            </ModalContent>
-                            <Footer>
-                                <ButtonSession>
+    if (eModal.length > 0) {
+        return (
+            <>
+                {
+                    eModal.map((EM:EModalProps, i:number)=>(
+                        <ModalBg key={i}>
+                            <ModalBox h={'auto'} w={'auto'}>
+                                <ModalHeader>
+                                    <h3> {EM.title} </h3>
                                     {
-                                        EM.options &&
-                                        EM.options.map((e, i)=>(
-                                            <button key={i}
-                                                onClick={()=>{
-                                                    handleClick(e.act);
-                                                    if (e.close) {
-                                                        Close(undefined, EM.configs?.OnCloseAction);
-                                                    }
-                                                }} 
-                                            >
-                                                {e.text} 
-                                            </button>
-                                        ))
+                                        !EM.configs?.NoCloseButton &&
+                                        <CloseButton onClick={()=>Close(undefined, EM.configs?.OnCloseAction)} />
                                     }
-                                </ButtonSession>
-                            </Footer>
-                        </ModalBox>
-                    </ModalBg>
-                ))
-            }
-        </>
-        
-    )
+                                </ModalHeader>
+                                <ModalContent>
+                                    {EM.content}
+                                </ModalContent>
+                                <Footer>
+                                    <ButtonSession>
+                                        {
+                                            EM.options &&
+                                            EM.options.map((e, i)=>(
+                                                <button key={i}
+                                                    onClick={()=>{
+                                                        handleClick(e.act);
+                                                        if (e.close) {
+                                                            Close(undefined, EM.configs?.OnCloseAction);
+                                                        }
+                                                    }} 
+                                                >
+                                                    {e.text} 
+                                                </button>
+                                            ))
+                                        }
+                                    </ButtonSession>
+                                </Footer>
+                            </ModalBox>
+                        </ModalBg>
+                    ))
+                }
+            </>
+        )
+    }
 
+    return null;
 }
 
 const EModal = React.forwardRef(EModalComponent)
