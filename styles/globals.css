@@ -23,3 +23,89 @@ a {
     color: black;
   }
 }
+
+.EMModalBox {
+  border-radius: 12px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: auto;
+    height: auto;
+    max-height: 90%;
+    max-width: 90%;
+
+    animation-name: EMOpenAnimation;
+    animation-duration: 0.4s;
+}
+
+@keyframes EMOpenAnimation {
+  0%{
+    transform: scale(0);
+  }
+  100% {
+      transform: scale(1);
+  }
+}
+
+.EMBG {
+  position: absolute;
+  background-color: #4d4d4d75;
+  top: 0px;
+  left: 0px;
+  z-index: 101;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  scroll-behavior: auto;
+}
+
+.EMHeader {
+  display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eae5fa;
+    width: 100%;
+    min-height: 50px;
+    padding: 0px 10px 0px 10px;
+
+}
+
+.EMHeaderTitle {
+  padding: 0px;
+  margin: 0px;
+  font-weight: 700;
+  font-size: 1.5rem;
+}
+
+.EMContent {
+  min-width: 100px;
+  max-width: 100%;
+  padding: 10px;
+  overflow: auto;
+}
+
+.EMFooter {
+  border-top: 1px solid #eae5fa;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  width: 100%;
+  max-width: 100%;
+}
+
+.EMButtonSession {
+  display: flex;
+  width: 100%;
+  margin: 5px;
+  justify-content: space-between;
+}
+
+.EMCloseButton {
+  cursor: pointer;
+}

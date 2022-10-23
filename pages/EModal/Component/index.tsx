@@ -1,17 +1,20 @@
 import React from 'react';
-import { Footer, ButtonSession, ModalBg, ModalBox, ModalContent, ModalHeader, CloseButton } from "./style"
-import { TypeProps, EModalProps } from './.d'
+import * as I from './interfaces.d'
 export interface ModalHandlersProps {
-    Open: (props:EModalProps)=>void;
+    Open: (props:I.EModalProps)=>void;
     Close: ()=>void;
     Clear: ()=>void;
 }
 
-const defaultConfigs = {
-    NoCloseButton: false,
+const CloseButton = ({onClick}:{onClick:Function}) => {
+    return (
+        <i className='EMCloseButton' onClick={()=>onClick()}>
+            <img src="/red-x-icon.svg" width={15} height={15} />
+        </i>
+    )
 }
 
-const reducer = (prevState:EModalProps[], action:{payload:any, type:string}) => {
+const reducer = (prevState:I.EModalProps[], action:{payload:any, type:string}) => {
     let array;
     switch (action.type) {
         case 'ADD':
@@ -35,24 +38,17 @@ const reducer = (prevState:EModalProps[], action:{payload:any, type:string}) => 
 
 const EModalComponent : React.ForwardRefRenderFunction<
 ModalHandlersProps,
-TypeProps> = 
+I.TypeProps> = 
 ({
-}:TypeProps, ref) => {
+}:I.TypeProps, ref) => {
     const [ eModal, dispatcher ] = React.useReducer<any>(reducer, []) as any;
 
-    const Open = React.useCallback( (props:EModalProps) => {
-        if (!props.configs) {
-            props.configs = defaultConfigs
-        }
+    const Open = React.useCallback( (props:I.EModalProps) => {
         dispatcher({ type: 'ADD', payload: props });
         return eModal.length - 1;
-    }, []);
+    }, [eModal.length]);
 
-    const handleClick = (act: Function) => {
-        act();
-    }
-
-    const Close = (id?:number, act?:Function) => {
+    const Close = React.useCallback((id?:number, act?:Function) => {
         if (id) {
             dispatcher({ type: 'FILTER', payload: id });
         } else {
@@ -62,11 +58,11 @@ TypeProps> =
         if (act) {
             act();
         }
-    }
+    }, [])
 
-    const Clear = () => {
+    const Clear = React.useCallback(() => {
         dispatcher({ type: 'CLEAR' });
-    }
+    }, [])
 
     React.useImperativeHandle(ref, ()=>({
         Open,
@@ -74,45 +70,101 @@ TypeProps> =
         Clear
     }));
 
+    const closeCallback = React.useCallback((act: Function | undefined) => {
+        Close();
+        if (act) {
+            act()
+        }
+    }, [Close])
+
+    const ModalHeader = React.useCallback(({children, closeButton, closeAction}:
+        {children: string | React.ReactNode, closeButton:boolean, closeAction: Function | undefined}
+    ) => {
+        if (!children && !closeButton) return null;
+
+        return (
+            <div className='EMHeader'>
+                <div className='EMHeaderTitle' > {children} </div>
+                {
+                    closeButton &&
+                    <CloseButton onClick={()=>closeCallback(closeAction)} />
+                }
+            </div>
+        )
+    }, [closeCallback])
+
+    const ModalContent = React.useCallback(({children}:{children:React.ReactNode})=>{
+        if (!children) return null;
+        return (
+            <div className='EMContent'>
+                {children}
+            </div>
+        )
+    }, [])
+
+    const ModalFooter = React.useCallback(({children, buttons, closeAction}:
+        {children:React.ReactNode, buttons: I.EMDefaultButtons, closeAction:Function | undefined}
+    )=>{
+        if (!children && !buttons) return null;
+
+        const Button = ({props}:{props:I.EMButton}) => {
+            if (!props) return null
+            return (
+                <button
+                    onClick={()=>{
+                        if (props.act) {
+                            props.act();
+                        }
+                        if (props.close) {
+                            closeCallback(closeAction)
+                        }
+                    }} 
+                >
+                    {props.text} 
+                </button>
+            )
+        }
+
+        return (
+            <div className='EMFooter'>
+                {children}
+                <div className='EMButtonSession'>
+                    <Button props={buttons.left} />
+                    <Button props={buttons.right} />
+                </div>
+            </div>
+        )
+    }, [closeCallback])
+
     if (eModal.length > 0) {
         return (
             <>
                 {
-                    eModal.map((EM:EModalProps, i:number)=>(
-                        <ModalBg key={i}>
-                            <ModalBox h={'auto'} w={'auto'}>
-                                <ModalHeader>
-                                    <h3> {EM.title} </h3>
-                                    {
-                                        !EM.configs?.NoCloseButton &&
-                                        <CloseButton onClick={()=>Close(undefined, EM.configs?.OnCloseAction)} />
-                                    }
-                                </ModalHeader>
-                                <ModalContent>
-                                    {EM.content}
-                                </ModalContent>
-                                <Footer>
-                                    <ButtonSession>
-                                        {
-                                            EM.options &&
-                                            EM.options.map((e, i)=>(
-                                                <button key={i}
-                                                    onClick={()=>{
-                                                        handleClick(e.act);
-                                                        if (e.close) {
-                                                            Close(undefined, EM.configs?.OnCloseAction);
-                                                        }
-                                                    }} 
-                                                >
-                                                    {e.text} 
-                                                </button>
-                                            ))
-                                        }
-                                    </ButtonSession>
-                                </Footer>
-                            </ModalBox>
-                        </ModalBg>
-                    ))
+                    eModal.map((EM:I.EModalProps, i:number)=>{
+                        return (
+                            <div className='EMBG' key={i}>
+                                <div className='EMModalBox'>
+                                    <ModalHeader
+                                        closeButton={!EM.configs?.NoCloseButton} 
+                                        closeAction={EM.configs?.OnCloseAction}
+                                    >
+                                        {EM.title} 
+                                    </ModalHeader>
+
+                                    <ModalContent>
+                                        {EM.content}
+                                    </ModalContent>
+                                    
+                                    <ModalFooter 
+                                        buttons={EM.defaultButtons}
+                                        closeAction={EM.configs?.OnCloseAction}
+                                    >
+                                        {EM.footer}
+                                    </ModalFooter>
+                                </div>
+                            </div>
+                        )
+                    })
                 }
             </>
         )

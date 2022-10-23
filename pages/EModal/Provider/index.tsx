@@ -32,7 +32,7 @@ export function useEModal() {
     return { EM };
 }
 
-export function configModal() {
+export function useConfigModal() {
     const context = React.useContext(ModalContext);
     if (!context) throw new Error("e: Provider");
     const { EM, addRef } = context as {EM:()=>{EModal:Function;EClose:Function}, addRef:(newRef:any)=>void};

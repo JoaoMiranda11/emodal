@@ -3,16 +3,40 @@ import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import { useEModal } from './EModal/Provider'
 
-const DefaultComponent = () => {
-  return (
-    <div style={{width:'400px', height: '300px'}}>
-      This is a example component
-    </div>
-  )
-}
 
 const Home: NextPage = () => {
   const { EM } = useEModal();
+  
+  const DefaultComponent = () => {
+    function Alert() {
+      EM().Open({
+        title: "Exemple Alert",
+        defaultButtons: {
+          left: {
+            text: 'Accept', 
+            close: true,
+            act: ()=>alert("Another alert?!"),
+          },
+          right: {
+            text: 'Decline',
+            close: true
+          }
+        },
+        configs: {
+          NoCloseButton: true
+        }
+      })
+    }
+
+    return (
+      <div style={{width:'400px', height: '300px'}}>
+        <h5>
+          This is a example component
+        </h5>
+        <button onClick={Alert}>Open Alert</button>
+      </div>
+    )
+  }
 
   const openSubModal = () => {
     EM().Open({
@@ -29,20 +53,18 @@ const Home: NextPage = () => {
 
   const handlerClick = () => {
     EM().Open({
-      title: 'Example Modal',
       content: <DefaultComponent/>,
-      options: [
-        {
+      defaultButtons: {
+        right: {
           text: 'Open Sub Modal', 
           close: false,
           act: openSubModal,
         },
-        {
+        left: {
           text: 'Exit',
-          close: true,
-          act: ()=>{}
+          close: true
         }
-      ],
+      },
       configs: {
         NoCloseButton: true
       }
