@@ -24,6 +24,8 @@ a {
   }
 }
 
+/* EM CSS */
+
 .EMModalBox {
   border-radius: 12px;
     background-color: white;
@@ -109,3 +111,5 @@ a {
 .EMCloseButton {
   cursor: pointer;
 }
+
+/* END EM CSS */

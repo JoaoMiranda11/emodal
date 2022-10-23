@@ -38,9 +38,9 @@ const reducer = (prevState:I.EModalProps[], action:{payload:any, type:string}) =
 
 const EModalComponent : React.ForwardRefRenderFunction<
 ModalHandlersProps,
-I.TypeProps> = 
+I.EMTypeProps> = 
 ({
-}:I.TypeProps, ref) => {
+}:I.EMTypeProps, ref) => {
     const [ eModal, dispatcher ] = React.useReducer<any>(reducer, []) as any;
 
     const Open = React.useCallback( (props:I.EModalProps) => {

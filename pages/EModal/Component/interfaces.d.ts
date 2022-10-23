@@ -1,13 +1,16 @@
 import React from "react";
-
-export interface TypeProps {
+export interface EMTypeProps {
+    /* Modal props */
 }
-
-
+export interface EMProps {
+    Open:(props:EModalProps)=> number,
+    Close:Function, 
+    Clear:Function
+}
 export interface EModalProps {
-    title: React.ReactComponentElement;
-    content: React.ReactComponentElement;
-    footer: React.ReactComponentElement;
+    title?: React.ReactComponentElement | string;
+    content?: React.ReactComponentElement;
+    footer?: React.ReactComponentElement;
     defaultButtons?: defaultButtons,
     configs?: EMConfigs
 }

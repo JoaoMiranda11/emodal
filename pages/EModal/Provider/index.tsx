@@ -1,5 +1,6 @@
 import React from 'react';
 import EModal, { ModalHandlersProps } from '../Component';
+import { EMProps } from '../Component/interfaces';
 
 const ModalContext = React.createContext({});
 const ErMsg = '[EMODAL]: Ref is not defined!'
@@ -28,7 +29,7 @@ export default function EModalProvider(props:any) {
 export function useEModal() {
     const context = React.useContext(ModalContext);
     if (!context) throw new Error("e: Provider");
-    const { EM } = context as {EM:Function};
+    const { EM } = context as {EM:()=>EMProps};
     return { EM };
 }
 
