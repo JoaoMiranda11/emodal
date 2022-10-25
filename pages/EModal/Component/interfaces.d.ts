@@ -29,4 +29,5 @@ export interface EMButton {
     text: string;
     act: Function;
     close?: boolean;
+    variant?: "1"|"2"|"3"|string
 }

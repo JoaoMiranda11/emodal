@@ -9,7 +9,7 @@ export interface ModalHandlersProps {
 const CloseButton = ({onClick}:{onClick:Function}) => {
     return (
         <i className='EMCloseButton' onClick={()=>onClick()}>
-            <img src="/red-x-icon.svg" width={15} height={15} />
+            X
         </i>
     )
 }
@@ -111,6 +111,7 @@ I.EMTypeProps> =
             if (!props) return null
             return (
                 <button
+                className={`EMDefaultButton EMDBVar${(props.variant || 1)}`}
                     onClick={()=>{
                         if (props.act) {
                             props.act();
